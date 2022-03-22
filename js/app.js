@@ -54,7 +54,7 @@ function product(name , fileExtension = 'jpg' ){
   this.name   = name;
   // console.log(this.name)
   // this.src    =  src ;
-  this.image = `img/${name}.${fileExtension}`;
+  this.image = `/img/${name}.${fileExtension}`;
   this.views  = 0;
   this.clicks = 0 ;
 
