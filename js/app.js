@@ -39,7 +39,7 @@ new product('scissors');
 new product('sweep','png');
 new product('unicorn');
 new product('wine-glass');
-
+console.log(productArray );
 renderImgs() ;
 
 
