@@ -2,7 +2,7 @@
 let roundRemaining = 25; // let votingRounds = 0;
 
 let productArray = [] ;
-
+let randomNumbers = [];
 
 // ******* DOM REFERENCES ******************
 
@@ -11,13 +11,17 @@ let imgHolder = document.getElementById('picture_section') ;
 let img_1 = document.getElementById('img_1');
 let img_2 = document.getElementById('img_2');
 let img_3 = document.getElementById('img_3');
-let results_btn = document.getElementById('results_btn');
-let results_list = document.getElementById("results_list");
+// let results_btn = document.getElementById('results_btn');
+// let results_list = document.getElementById("results_list");
+
+let viewArray=[];
+let clicksArray = [];
+let namesArray =[] ;
 
 
 
 // temp insert this into a declanation
-results_btn.addEventListener('click', handleShowResults);
+// results_btn.addEventListener('click', handleShowResults);
 imgHolder.addEventListener('click' , handleClick);
 
 
@@ -39,7 +43,7 @@ new product('scissors');
 new product('sweep','png');
 new product('unicorn');
 new product('wine-glass');
-console.log(productArray );
+// console.log(productArray );
 renderImgs() ;
 
 
@@ -85,21 +89,21 @@ function getRandomIndex() {
 //this posts the clicks and % once you go past your limit 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function handleShowResults(){
-  console.log('View button is working correctly');
+// function handleShowResults(){
+//   console.log('View button is working correctly');
 
 
 
-  // if(votingRounds === 0){
+//   // if(votingRounds === 0){
 
-  //   for(let i = 0; i < goatArray.length; i++){
-  //     let li = document.createElement('li');
+//   //   for(let i = 0; i < goatArray.length; i++){
+//   //     let li = document.createElement('li');
 
-  //     li.textContent = `${goatArray[i].goatName} was viewed ${goatArray[i].views} times and clicked on ${goatArray[i].clicks} times.`;
-  //     resultsList.appendChild(li);
-  //   }
-  // }
-}
+//   //     li.textContent = `${goatArray[i].goatName} was viewed ${goatArray[i].views} times and clicked on ${goatArray[i].clicks} times.`;
+//   //     resultsList.appendChild(li);
+//   //   }
+//   // }
+// }
 
 
 function unique(input_array){
@@ -125,17 +129,33 @@ function unique(input_array){
 //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function renderImgs(){
-  
+  let randomNumber = getRandomIndex();
+//fills up the list with random numbers
+  while (randomNumbers.length < 6) {
+    randomNumber = getRandomIndex();
+    // console.log("new random: "+ randomNumber) ;
 
-  console.log('in render');
-  let prodOneIndex = getRandomIndex();
-  let prodTwoIndex = getRandomIndex();
-
-  // let prodOneIndex = 3
-  // let prodTwoIndex =3
-  let prodThreeIndex = getRandomIndex();
+    if (!randomNumbers.includes(randomNumber)) {
+      // console.log("pushing: "+ randomNumber) ;
+      randomNumbers.push(randomNumber);
+    }
+  }
 
 
+// takes last 3 and makes so that they can be displayed
+  let prodOneIndex = randomNumbers[3];
+  let prodTwoIndex = randomNumbers[4];
+  let prodThreeIndex = randomNumbers[5];
+
+  // console.log(randomNumbers);
+
+  // https://teamtreehouse.com/community/removing-more-than-1-element-using-pop-and-shift-method
+  //removes the first 3 indexes when 2 rounds are in the list 
+  // this shifts the numbers into the hold position for the next render
+  if(randomNumbers.length === 6){  
+    // console.log('hit length 6'); 
+      randomNumbers.splice(0,2);
+  }
 
 
 
@@ -154,7 +174,7 @@ function renderImgs(){
     temp =  unique( [ prodOneIndex , prodTwoIndex , prodThreeIndex  ] );
   }
 
-  console.log( productArray[prodOneIndex].image) ; 
+  // console.log( productArray[prodOneIndex].image) ; 
 
   img_1.src= productArray[prodOneIndex].image ;
   img_1.alt= productArray[prodOneIndex].name ;
@@ -188,11 +208,13 @@ function handleClick(event){
  
   // targets the section and allows you to get the image that is clicked on 
   let imgClicked = event.target.alt;
-  console.log(imgClicked);
+  // console.log(imgClicked);
 
 
   for(i=0 ; i < productArray.length ; i++){
     if(imgClicked===productArray[i].name){
+      console.log('in the clicker====='+imgClicked +'  '+  productArray[i].name );
+
       productArray[i].clicks++;
               }
         }//for 
@@ -200,11 +222,14 @@ function handleClick(event){
         roundRemaining--;
         if( roundRemaining ===0){
           imgHolder.removeEventListener('click' , handleClick);
+            makeChart();
             return; // dont understand why this is here 
+        }else{
+          renderImgs();
         }
 
 
-        renderImgs();
+       
 }
 
 
@@ -215,30 +240,169 @@ function handleClick(event){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function handleShowResults(){
-  if(roundRemaining===0){
-        for( i =0;i<productArray.length;i++){
-          let li = document.createElement('li');
+// function handleShowResults(){
+//   if(roundRemaining===0){
+//         for( i =0;i<productArray.length;i++){
+//           let li = document.createElement('li');
 
 
-          let percentage = productArray[i].clicks / productArray[i].views  *100 ;
+//           let percentage = productArray[i].clicks / productArray[i].views  *100 ;
 
-          if(isNaN(percentage)){  
-                      percentage=0;
-                      }
-          li.textContent=(`${productArray[i].name} : views ${productArray[i].clicks} , selection rate:  ${Math.round(percentage)}% `);
-          results_list.appendChild(li) ;
-        }
-   }
+//           if(isNaN(percentage)){  
+//                       percentage=0;
+//                       }
+//           li.textContent=(`${productArray[i].name} : views ${productArray[i].clicks} , selection rate:  ${Math.round(percentage)}% `);
+//           results_list.appendChild(li) ;
+//         }
+//    }
+// }
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// added for part 2 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+ function getNumbers(){
+console.log(productArray) ; 
+
+  for(let i =0 ; i < productArray.length; i++){
+    viewArray.push(productArray[i].views) ; 
+    clicksArray.push(productArray[i].clicks) ;
+
+    namesArray.push(productArray[i].name) ;
+            }
+
+    // console.log(viewArray);
 }
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function makeChart(){
+
+  getNumbers() ;
+
+const ctx = document.getElementById('myChart').getContext('2d');
+
+const data = {
+  labels: namesArray,
+  datasets: [{
+    label: 'Likes',
+    data: viewArray,
+    backgroundColor: [
+      'rgba(255, 99, 132, 0.2)'
+    ],
+    borderColor: [
+      'rgb(255, 99, 132)'
+    ],
+    borderWidth: 1
+  },
+  {
+    label: 'Clicks',
+    data: clicksArray,
+    backgroundColor: [
+      'rgba(255, 159, 64, 0.2)'
+    ],
+    borderColor: [
+      'rgb(255, 159, 64)'
+    ],
+    borderWidth: 1
+  }]
+};
+
+const config = {
+  type: 'bar',
+  data: data,
+  options: {
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  },
+};
+let canvasChart = document.getElementById('myChart');
+const myChart = new Chart(canvasChart, config);
+
+
+
+
+// const myChart = new Chart(ctx, {
+//     type: 'bar',
+//     data: {
+//         labels: namesArray,
+//         datasets: [{
+//             label: '# of Views',
+//             data: viewArray,
+//             backgroundColor: [
+//                 'rgba(255, 99, 132, 0.2)',
+//                 'rgba(54, 162, 235, 0.2)',
+//                 'rgba(255, 206, 86, 0.2)',
+//                 'rgba(75, 192, 192, 0.2)',
+//                 'rgba(153, 102, 255, 0.2)',
+//                 'rgba(255, 159, 64, 0.2)'
+//             ],
+//             borderColor: [
+//                 'rgba(255, 99, 132, 1)',
+//                 'rgba(54, 162, 235, 1)',
+//                 'rgba(255, 206, 86, 1)',
+//                 'rgba(75, 192, 192, 1)',
+//                 'rgba(153, 102, 255, 1)',
+//                 'rgba(255, 159, 64, 1)'
+//             ],
+//             borderWidth: 1
+//         }]
+//     },
+//     data: {
+//       labels: namesArray,
+//       datasets: [{
+//           label: '# of Clicks',
+//           data: clicksArray,
+//           backgroundColor: [
+//               'rgba(255, 99, 132, 0.2)',
+//               'rgba(54, 162, 235, 0.2)',
+//               'rgba(255, 206, 86, 0.2)',
+//               'rgba(75, 192, 192, 0.2)',
+//               'rgba(153, 102, 255, 0.2)',
+//               'rgba(255, 159, 64, 0.2)'
+//           ],
+//           borderColor: [
+//               'rgba(255, 99, 132, 1)',
+//               'rgba(54, 162, 235, 1)',
+//               'rgba(255, 206, 86, 1)',
+//               'rgba(75, 192, 192, 1)',
+//               'rgba(153, 102, 255, 1)',
+//               'rgba(255, 159, 64, 1)'
+//           ],
+//           borderWidth: 1
+//       }]
+//   },
+//     options: {
+//         scales: {
+//             y: {
+//                 beginAtZero: true
+//             }
+//         }
+//     }
+// });
+
+ 
+
+} // make chart
+
+
+
+
+
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

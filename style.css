@@ -37,3 +37,12 @@ img{
 ul{
   list-style-type: none ;
 }
+
+
+
+
+/* LAB 2 */
+#myChart {
+  width: 150px;
+  min-height: 400px;
+}
