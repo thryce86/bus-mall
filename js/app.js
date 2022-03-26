@@ -1,5 +1,5 @@
 // console.log('hellos');
-let roundRemaining = 25; // let votingRounds = 0;
+let roundRemaining = 5; // let votingRounds = 0;
 
 let productArray = [] ;
 let randomNumbers = [];
@@ -24,26 +24,37 @@ let namesArray =[] ;
 // results_btn.addEventListener('click', handleShowResults);
 imgHolder.addEventListener('click' , handleClick);
 
+// prob1
+let retreivedProducts = localStorage.getItem('products');
+// console.log(retreivedProducts); // returns a null
 
-new product('banana');
-new product('boots');
-new product('bubblegum');
-new product('cthulhu');
-new product('dragon');
-new product('shark');
-new product('tauntaun');
-new product('bag');
-// new product('shark');
-new product('bathroom');
-new product('breakfast');
+let parsedProducts = JSON.parse(retreivedProducts) ; 
 
-new product('chair');
-new product('dog-duck');
-new product('scissors');
-new product('sweep','png');
-new product('unicorn');
-new product('wine-glass');
-// console.log(productArray );
+if(retreivedProducts){
+productArray = parsedProducts ;
+}else{
+
+    new product('banana');
+    new product('boots');
+    new product('bubblegum');
+    new product('cthulhu');
+    new product('dragon');
+    new product('shark');
+    new product('tauntaun');
+    new product('bag');
+    // new product('shark');
+    new product('bathroom');
+    new product('breakfast');
+
+    new product('chair');
+    new product('dog-duck');
+    new product('scissors');
+    new product('sweep','png');
+    new product('unicorn');
+    new product('wine-glass');
+    // console.log(productArray );
+
+}
 renderImgs() ;
 
 
@@ -223,6 +234,15 @@ function handleClick(event){
         if( roundRemaining ===0){
           imgHolder.removeEventListener('click' , handleClick);
             makeChart();
+
+          
+            //Convert obj to JSON
+            let stringifiedProducts = JSON.stringify(productArray) ; 
+           //write JSON to local storage
+
+           localStorage.setItem('products', stringifiedProducts) ;
+
+
             return; // dont understand why this is here 
         }else{
           renderImgs();
