@@ -1,5 +1,5 @@
 // console.log('hellos');
-let roundRemaining = 5; // let votingRounds = 0;
+let roundRemaining = 5; // let votingRounds = 0;   
 
 let productArray = [] ;
 let randomNumbers = [];
